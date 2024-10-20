@@ -14,3 +14,9 @@
 
 6. Run app
    `yarn start:dev`
+
+7. Run seed
+
+```
+http://localhost:3000/api/seed
+```
