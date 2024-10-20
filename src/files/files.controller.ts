@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Controller,
   FileTypeValidator,
   ParseFilePipe,
@@ -7,15 +6,25 @@ import {
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
-import { FilesService } from './files.service';
+import { diskStorage } from 'multer';
 import { FileInterceptor } from '@nestjs/platform-express';
+
+import { FilesService } from './files.service';
+import { fileNamer } from './helpers/fileNamer.helper';
 
 @Controller('files')
 export class FilesController {
   constructor(private readonly filesService: FilesService) {}
 
   @Post('product')
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: './static/products',
+        filename: fileNamer,
+      }),
+    }),
+  )
   async uploadProductImage(
     @UploadedFile(
       new ParseFilePipe({
@@ -26,7 +35,8 @@ export class FilesController {
     )
     file: Express.Multer.File,
   ) {
-    if (!file) throw new BadRequestException('File cannot be null');
+    console.log(file);
+
     return { filename: file.originalname };
   }
 }
