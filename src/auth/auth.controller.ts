@@ -25,6 +25,12 @@ export class AuthController {
     return await this.authService.login(loginUserDto);
   }
 
+  @Get('check-status')
+  @Auth()
+  async checkAuthStatus(@GetUser() user: User) {
+    return this.authService.checkAuthStatus(user);
+  }
+
   @Get('private')
   @UseGuards(AuthGuard())
   testingPrivateRoute(
