@@ -3,12 +3,14 @@ import {
   Injectable,
   InternalServerErrorException,
   Logger,
+  NotFoundException,
 } from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import * as bcrypt from 'bcrypt';
 
 import { User } from './entities/user.entity';
+import { LoginUserDto } from './dto/login-user.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 
 @Injectable()
@@ -35,6 +37,22 @@ export class AuthService {
     } catch (error) {
       this.handleDBExceptions(error);
     }
+  }
+
+  async login(loginUserDto: LoginUserDto) {
+    const { email, password } = loginUserDto;
+
+    const user = await this.userRepository.findOne({
+      where: { email },
+      select: { email: true, password: true },
+    });
+
+    if (!user) throw new NotFoundException(`Not valid credentials (email)`);
+
+    if (!bcrypt.compareSync(password, user.password))
+      throw new NotFoundException(`Not valid credentials (password)`);
+
+    return user;
   }
 
   private handleDBExceptions(error: any): never {
