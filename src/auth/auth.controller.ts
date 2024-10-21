@@ -6,6 +6,9 @@ import { User } from './entities/user.entity';
 import { LoginUserDto } from './dto/login-user.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { GetUser } from './decorators/get-user.decorator';
+import { UserRoleGuard } from './guards/user-role.guard';
+import { RoleProtected } from './decorators/role-protected.decorator';
+import { ValidRoles } from './interfaces/valid-roles.enum';
 
 @Controller('auth')
 export class AuthController {
@@ -23,11 +26,24 @@ export class AuthController {
 
   @Get('private')
   @UseGuards(AuthGuard())
-  testingPrivateRoute(@GetUser() user: User) {
+  testingPrivateRoute(
+    @GetUser() user: User,
+    @GetUser('email') userEmail: User,
+  ) {
     return {
       ok: true,
       message: 'private',
       user,
+      userEmail,
     };
+  }
+
+  // @SetMetadata('roles', ['admin', 'super-user'])
+
+  @Get('private2')
+  @RoleProtected(ValidRoles.superUser)
+  @UseGuards(AuthGuard(), UserRoleGuard)
+  privateRoute2(@GetUser() user: User) {
+    return user;
   }
 }
