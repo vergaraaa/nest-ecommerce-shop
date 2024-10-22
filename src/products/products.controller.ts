@@ -9,7 +9,7 @@ import {
   ParseUUIDPipe,
   Query,
 } from '@nestjs/common';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { Product } from './entities/product.entity';
 import { User } from 'src/auth/entities/user.entity';
@@ -28,6 +28,7 @@ export class ProductsController {
 
   @Post()
   @Auth()
+  @ApiBearerAuth()
   @ApiResponse({ status: 201, description: 'Product created', type: Product })
   @ApiResponse({ status: 400, description: 'Bad request' })
   @ApiResponse({ status: 403, description: 'Forbidden. Token related' })
@@ -52,6 +53,7 @@ export class ProductsController {
 
   @Patch(':id')
   @Auth(ValidRoles.admin)
+  @ApiBearerAuth()
   update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateProductDto: UpdateProductDto,
@@ -62,6 +64,7 @@ export class ProductsController {
 
   @Delete(':id')
   @Auth(ValidRoles.admin)
+  @ApiBearerAuth()
   remove(@Param('id', ParseUUIDPipe) id: string) {
     return this.productsService.remove(id);
   }

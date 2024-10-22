@@ -17,6 +17,7 @@ async function bootstrap() {
   );
 
   const config = new DocumentBuilder()
+    .addBearerAuth()
     .setTitle('Teslo Shop API')
     .setDescription('Teslo shop endpoints')
     .setVersion('1.0')

@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   IsArray,
   IsIn,
@@ -20,7 +20,7 @@ export class CreateProductDto {
   @MinLength(1)
   title: string;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsNumber()
   @IsPositive()
   @IsOptional()
@@ -31,12 +31,12 @@ export class CreateProductDto {
   @IsOptional()
   description?: string;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsString()
   @IsOptional()
   slug?: string;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsInt()
   @IsPositive()
   @IsOptional()
@@ -57,7 +57,7 @@ export class CreateProductDto {
   @IsOptional()
   tags: string[];
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsString({ each: true })
   @IsArray()
   @IsOptional()
