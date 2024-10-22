@@ -11,13 +11,15 @@ import {
 } from '@nestjs/common';
 import { Response } from 'express';
 import { diskStorage } from 'multer';
+import { ApiTags } from '@nestjs/swagger';
+import { ConfigService } from '@nestjs/config';
 import { FileInterceptor } from '@nestjs/platform-express';
 
 import { FilesService } from './files.service';
 import { fileNamer } from './helpers/fileNamer.helper';
-import { ConfigService } from '@nestjs/config';
 
 @Controller('files')
+@ApiTags('Files')
 export class FilesController {
   constructor(
     private readonly filesService: FilesService,
