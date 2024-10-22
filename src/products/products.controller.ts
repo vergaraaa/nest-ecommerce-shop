@@ -36,6 +36,11 @@ export class ProductsController {
   }
 
   @Get()
+  @ApiResponse({
+    status: 200,
+    description: 'Get list of products',
+    type: [Product],
+  })
   findAll(@Query() paginationDto: PaginationDto) {
     return this.productsService.findAll(paginationDto);
   }
